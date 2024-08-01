@@ -7,6 +7,7 @@ import {
   getAllPosts,
   getFollowingPosts,
   getLikedPosts,
+  getUserPosts,
   likeUnlikePost,
 } from "../controllers/post.controller.js";
 import { protectedRoute } from "../middleware/protectRoute.js";
