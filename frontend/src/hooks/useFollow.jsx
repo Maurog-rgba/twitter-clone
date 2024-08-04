@@ -22,8 +22,8 @@ export const useFollow = () => {
     },
     onSuccess: () => {
       Promise.all([
-        queryClient.invalidateQueries({ queryKey: "suggestedUsers" }),
-        queryClient.invalidateQueries({ queryKey: "authUser" }),
+        queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
+        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
       ]);
     },
     onError: (error) => {

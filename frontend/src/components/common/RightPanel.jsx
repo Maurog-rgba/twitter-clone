@@ -6,7 +6,7 @@ import RightPanelSkeleton from "../skeletons/RightPanelSkeleton";
 
 const RightPanel = () => {
   const { data: suggestedUsers, isLoading } = useQuery({
-    queryKey: "suggestedUsers",
+    queryKey: ["suggestedUsers"],
     queryFn: async () => {
       try {
         const res = await fetch("/api/users/suggested");
