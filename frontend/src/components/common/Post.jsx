@@ -7,9 +7,12 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { formatPostDate } from "../../utils/date";
 import LoadingSpinner from "./LoadingSpinner";
+import { BsEmojiSmileFill } from "react-icons/bs";
+import EmojiPicker from "emoji-picker-react";
 
 const Post = ({ post }) => {
   const [comment, setComment] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
   const queryClient = useQueryClient();
@@ -132,6 +135,11 @@ const Post = ({ post }) => {
     likePost();
   };
 
+  const onEmojiClick = (emojiData) => {
+    setComment((prevText) => prevText + emojiData.emoji);
+    setShowEmojiPicker(false);
+  };
+
   return (
     <>
       <div className="flex gap-2 items-start p-4 border-b border-gray-700">
@@ -186,7 +194,7 @@ const Post = ({ post }) => {
               </div>
               {/* We're using Modal Component from DaisyUI */}
               <dialog id={`comments_modal${post._id}`} className="modal border-none outline-none">
-                <div className="modal-box rounded border border-gray-600">
+                <div className="modal-box w-11/12 max-w-3xl min-h-screen rounded border border-gray-600">
                   <h3 className="font-bold text-lg mb-4">COMMENTS</h3>
                   <div className="flex flex-col gap-3 max-h-60 overflow-auto">
                     {post.comments.length === 0 && (
@@ -212,16 +220,29 @@ const Post = ({ post }) => {
                     ))}
                   </div>
                   <form
-                    className="flex gap-2 items-center mt-4 border-t border-gray-600 pt-2"
+                    className="flex flex-col gap-2 items-start mt-4 border-t border-gray-600 pt-2"
                     onSubmit={handlePostComment}
                   >
                     <textarea
-                      className="textarea w-full p-1 rounded text-md resize-none border focus:outline-none  border-gray-800"
+                      className="textarea w-full p-1 rounded text-md resize-none border focus:outline-none border-gray-800"
                       placeholder="Add a comment..."
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                     />
-                    <button className="btn btn-primary rounded-full btn-sm text-white px-4">
+                    <div className="relative w-full">
+                      <div className="flex gap-1 items-center">
+                        <BsEmojiSmileFill
+                          className="fill-primary w-5 h-5 cursor-pointer"
+                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                        />
+                      </div>
+                      {showEmojiPicker && (
+                        <div className="absolute z-10">
+                          <EmojiPicker onEmojiClick={onEmojiClick} />
+                        </div>
+                      )}
+                    </div>
+                    <button className="btn btn-primary rounded-full btn-sm text-white px-4 self-end">
                       {isCommenting ? <LoadingSpinner size="md" /> : "Post"}
                     </button>
                   </form>
